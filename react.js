@@ -1,33 +1,77 @@
-function createOject(objectType, props, ...children) {
-  if (typeof objectType === "function") {
-    return objectType(props);
-    return {
-      tagName: objectType,
-      props: virtualobjectprops
-    };
+function convertToHtml(virtualNode) {
+  console.log(virtualNode);
 
-    const virtualobjectprops = {
-      ...props,
-      children
-    };
+  if(typeof virtualNode === 'string' || typeof virtualNode === 'number') {
+    return document.createTextNode(`${virtualNode}`);
   }
+
+  const $domElement = document.createElement(virtualNode.tagName);
+
+  virtualNode.props.children.forEach((virtualChild) => {
+    $domElement.appendChild(convertToHtml(virtualChild));
+  })
+
+  return $domElement;
 }
 
-const React = createOject;
+function render(initialVirtualTree, $domRoot) {
+  // console.log(JSON.stringify(initialVirtualTree, null, 4));
 
-function render(htmlTree, $domRoot) {
-  const $appHTML = convertToHtml(htmlTree);
+  const $appHTML = convertToHtml(initialVirtualTree);
+  console.log('$appHTML',$appHTML);
   $domRoot.appendChild($appHTML);
 }
 
-function convertToHtml(virtualNode) {
-  if (typeof virtualNode === "string") {
-    return document.createTextNode(virtualNode);
+function createElement(elementType, props, ...children) {
+  const virtualElementProps = {
+    ...props,
+    children
   }
 
-  virtualNode.appendChild.forEach((virtualChild) => {
-    $NewdomOject.appendChild(convertToHtml(virtualChild));
-  });
-  const $NewdomOject = document.createElement(virtualNode.tagName);
-  return $NewdomOject;
+  if(typeof elementType === "function") {
+    return elementType(virtualElementProps);
+  }
+
+  return {
+    tagName: elementType,
+    props: virtualElementProps
+  };
 }
+
+const React = {
+  createElement,
+};
+
+// ========================================
+
+function Title() {
+  return React.createElement("h1", null, "Bla");
+}
+
+function App(props) {
+  // return (
+  //   React.createElement(
+  //     "section",
+  //     {
+  //       className: "App"
+  //     }, 
+  //     React.createElement(Title, null), 
+  //     React.createElement("div", null, 
+  //     React.createElement("div", null, "0"), 
+  //     React.createElement("button", null, "Incrementar"), 
+  //     React.createElement("button", null, "Decrementar"))
+  //   )
+  // );
+  return (
+    <section className="App">
+      <h1>Contador</h1>
+      <div>
+        <div>0</div>
+        <button>Incrementar</button>
+        <button>Decrementar</button>
+      </div>
+    </section>
+  );
+}
+
+render(React.createElement(App, null), document.querySelector('#root'));
