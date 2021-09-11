@@ -1,12 +1,12 @@
 # These are supported funding model platforms
 
 github: "https://github.com/Guga-innecco"
-patreon: no
-open_collective: no
-ko_fi: no
-tidelift: no
+patreon: ""
+open_collective: 
+ko_fi: ""
+tidelift: ""
 community_bridge: "ReactLite"
-liberapay: "React"
-issuehunt: no
-otechie: no
-custom: no
+liberapay: ""
+issuehunt: ""
+otechie: ""
+custom: ""
